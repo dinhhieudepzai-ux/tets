@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeluxDark | Portfolio</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Highlight.js (Tokyo Night Dark) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/tokyo-night-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #09090b; }
+        code, pre { font-family: 'JetBrains Mono', monospace; }
+        .bg-grid {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(63, 63, 70, 0.1) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(63, 63, 70, 0.1) 1px, transparent 1px);
+        }
+    </style>
+</head>
+<body class="text-zinc-400 antialiased bg-grid" 
+      x-data="{ 
+          lang: 'vi',
+          discordId: '1510827722744791114',
+          statusColor: 'bg-emerald-500', 
+          statusText: 'Online',          
+          activityText: '',
+          
+          init() {
+              // Chỉ fetch để lấy hoạt động (Game/Spotify) realtime nếu có
+              fetch(`https://api.lanyard.rest/v1/users/${this.discordId}`)
+                  .then(res => res.json())
+                  .then(res => {
+                      if (res.success && res.data) {
+                          const user = res.data;
+                          if (user.activities && user.activities.length > 0) {
+                              const realActivity = user.activities.find(act => act.type !== 4);
+                              if (realActivity) {
+                                  this.activityText = `Playing: ${realActivity.name}`;
+                              } else if (user.listening_to_spotify) {
+                                  this.activityText = `Listening to Spotify`;
+                              }
+                          }
+                      }
+                  }).catch(err => console.error('Lỗi sync Discord:', err));
+          }
+      }">
+
+    <!-- 1. THANH NAVIGATION HEADER -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-zinc-950/70 backdrop-blur-md border-b border-zinc-800/50">
+        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="#" class="font-mono text-white font-bold tracking-wider">deluxdark_</a>
+            
+            <nav class="hidden md:flex items-center space-x-6 text-sm font-medium">
+                <a href="#about" class="text-zinc-400 hover:text-white transition">Giới thiệu</a>
+                <a href="#skills" class="text-zinc-400 hover:text-white transition">Kỹ năng</a>
+                <a href="#projects" class="text-zinc-400 hover:text-white transition">Dự án</a>
+                <a href="#snippets" class="text-zinc-400 hover:text-white transition">Thư viện Code</a>
+                <a href="#contact" class="text-zinc-400 hover:text-white transition">Liên hệ</a>
+            </nav>
+
+            <div class="flex items-center space-x-2 bg-zinc-900 px-2 py-1 rounded-md border border-zinc-800 text-xs font-mono">
+                <button @click="lang = 'en'" :class="lang === 'en' ? 'text-violet-400 font-bold' : 'text-zinc-500'">EN</button>
+                <span class="text-zinc-700">|</span>
+                <button @click="lang = 'vi'" :class="lang === 'vi' ? 'text-violet-400 font-bold' : 'text-zinc-500'">VI</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTAINER CHÍNH -->
+    <div class="max-w-5xl mx-auto px-6 pt-32 space-y-32">
+
+        <!-- 2. HERO SECTION -->
+        <section class="flex flex-col md:flex-row items-center justify-between gap-12 py-12">
+            <div class="space-y-6 max-w-xl">
+                <div class="inline-flex items-center space-x-2 bg-violet-950/50 border border-violet-800/50 px-3 py-1 rounded-full text-xs text-violet-400">
+                    <span>✦</span> <span x-text="lang === 'vi' ? 'Sẵn sàng cho các giải pháp sáng tạo' : 'Ready for creative solutions'"></span>
+                </div>
+                <h1 class="text-5xl font-extrabold text-white tracking-tight">DeluxDark</h1>
+                <p class="text-base text-zinc-400 leading-relaxed">
+                    Đam mê xây dựng hệ thống bot tự động, lập trình kịch bản game tương tác cao và thiết kế các ứng dụng tối ưu, hiện đại.
+                </p>
+                <div class="flex space-x-4">
+                    <a href="#projects" class="bg-violet-600 hover:bg-violet-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition shadow-lg shadow-violet-600/20">Xem dự án</a>
+                    <a href="#contact" class="bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition">Liên hệ</a>
+                </div>
+                <div class="grid grid-cols-3 gap-4 pt-6 border-t border-zinc-800/60 font-mono">
+                    <div><p class="text-2xl font-bold text-white">30+</p><p class="text-xs text-zinc-500">DỰ ÁN LỚN NHỎ</p></div>
+                    <div><p class="text-2xl font-bold text-white">15+</p><p class="text-xs text-zinc-500">DỰ ÁN ROBLOX LUA</p></div>
+                    <div><p class="text-2xl font-bold text-white">4+</p><p class="text-xs text-zinc-500">NGÔN NGỮ</p></div>
+                </div>
+            </div>
+            
+            <!-- KHU VỰC DISCORD: ĐÃ XOÁ HOÀN TOÀN KHUNG ẢNH TRỐNG -->
+            <div class="flex flex-col items-center justify-center md:pr-12">
+                <!-- Chỉ giữ lại Tag Trạng thái gọn gàng, force cứng Online màu xanh emerald -->
+                <div class="bg-zinc-900/80 px-5 py-2.5 rounded-xl border border-zinc-800/80 text-sm font-mono flex flex-col items-center text-center min-w-[180px] shadow-xl">
+                    <div class="flex items-center gap-2.5">
+                        <!-- Chấm xanh Online -->
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block shadow-lg shadow-emerald-500/50 animate-pulse"></span>
+                        <span class="text-zinc-400">Discord:</span>
+                        <span class="font-semibold text-white">Online</span>
+                    </div>
+                    <span class="text-[11px] text-violet-400 truncate w-full mt-1.5" x-show="activityText" x-text="activityText"></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. ABOUT SECTION -->
+        <section id="about" class="space-y-8">
+            <div class="space-y-2">
+                <p class="text-xs font-mono text-violet-500 uppercase tracking-widest">01 // GIỚI THIỆU</p>
+                <h2 class="text-3xl font-bold text-white">Về tôi</h2>
+            </div>
+            <div class="grid md:grid-cols-5 gap-8 items-start">
+                <div class="md:col-span-2 bg-[#12131a] rounded-xl p-4 border border-zinc-800 shadow-xl font-mono text-xs">
+                    <div class="flex space-x-1.5 mb-4">
+                        <span class="w-3 h-3 rounded-full bg-red-500/80"></span>
+                        <span class="w-3 h-3 rounded-full bg-yellow-500/80"></span>
+                        <span class="w-3 h-3 rounded-full bg-green-500/80"></span>
+                    </div>
+                    <p class="text-zinc-500">{</p>
+                    <p class="pl-4"><span class="text-[#7aa2f7]">"name"</span>: <span class="text-[#e0af68]">"DeluxDark"</span>,</p>
+                    <p class="pl-4"><span class="text-[#7aa2f7]">"role"</span>: <span class="text-[#e0af68]">"Full-Stack Developer"</span>,</p>
+                    <p class="pl-4"><span class="text-[#7aa2f7]">"focus"</span>: <span class="text-[#e0af68]">"Discord Bot & Roblox"</span>,</p>
+                    <p class="pl-4"><span class="text-[#7aa2f7]">"location"</span>: <span class="text-[#e0af68]">"TP.HCM, Viet Nam"</span>,</p>
+                    <p class="pl-4"><span class="text-[#7aa2f7]">"skills"</span>: [<span class="text-[#9ece6a]">"Python"</span>, <span class="text-[#9ece6a]">"Lua"</span>, <span class="text-[#9ece6a]">"JS"</span>]</p>
+                    <p class="text-zinc-500">}</p>
+                </div>
+                <div class="md:col-span-3 space-y-6">
+                    <h3 class="text-lg font-semibold text-white">Đam mê tối ưu hóa hệ thống và xây dựng kịch bản tự động hóa.</h3>
+                    <p class="text-zinc-400 text-sm leading-relaxed">
+                        Tôi là một nhà phát triển tập trung vào xây dựng hệ thống bot tự động và lập trình kịch bản trò chơi tương tác. Với kinh nghiệm thực chiến qua nhiều dự án cá nhân, tôi đam mê biến logic phức tạp thành các giải pháp chạy ổn định, tối ưu và mang lại giá trị thực tế.
+                    </p>
+                    <div class="grid grid-cols-2 gap-4 text-xs font-mono">
+                        <div class="bg-zinc-900/50 p-3 rounded-lg border border-zinc-800/80"><p class="text-zinc-500">HỌC VẤN</p><p class="text-zinc-200 mt-1">Phát triển Phần mềm</p></div>
+                        <div class="bg-zinc-900/50 p-3 rounded-lg border border-zinc-800/80"><p class="text-zinc-500">ĐỊA ĐIỂM</p><p class="text-zinc-200 mt-1">TP.HCM, Việt Nam</p></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. SKILLS SECTION -->
+        <section id="skills" class="space-y-8">
+            <div class="space-y-2">
+                <p class="text-xs font-mono text-violet-500 uppercase tracking-widest">02 // KỸ NĂNG</p>
+                <h2 class="text-3xl font-bold text-white">Công nghệ sử dụng</h2>
+            </div>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-zinc-900/40 border border-zinc-800 p-6 rounded-xl space-y-4">
+                    <div class="text-violet-400 text-lg">🤖 Bot Development</div>
+                    <div class="flex flex-wrap gap-2 text-xs font-mono">
+                        <span class="bg-zinc-950 border border-zinc-800 px-2.5 py-1 rounded">Python</span>
+                        <span class="bg-zinc-950 border border-zinc-800 px-2.5 py-1 rounded">discord.py</span>
+                        <span class="bg-zinc-950 border border-zinc-800 px-2.5 py-1 rounded">JavaScript</span>
+                        <span class="bg-zinc-950 border border-zinc-800 px-2.5 py-1 rounded">Node.js</span>
+                    </div>
+                </div>
+                <div class="bg-zinc-900/40 border border-zinc-800 p-6 rounded-xl space-y-4">
+                    <div class="text-emerald-400 text-lg">🎮 Game Scripting</div>
+                    <div class="flex flex-wrap gap-2 text-xs font-mono">
+                        <span class="bg-zinc-950 border border-zinc-800 px-2.5 py-1 rounded">Lua / Luau</span>
+                        <span class="bg-zinc-950 border border-zinc-800 px-2.5 py-1 rounded">Roblox Studio</span>
+                        <span class="bg-zinc-950 border border-zinc-800 px-2.5 py-1 rounded">DataStore Service</span>
+                    </div>
+                </div>
+                <div class="bg-zinc-900/40 border border-zinc-800 p-6 rounded-xl space-y-4">
+                    <div class="text-blue-400 text-lg">🛠️ Tools & Infra</div>
+                    <div class="flex flex-wrap gap-2 text-xs font-mono">
+                        <span class="bg-zinc-950 border border-zinc-800 px-2.5 py-1 rounded">Git & GitHub</span>
+                        <span class="bg-zinc-950 border border-zinc-800 px-2.5 py-1 rounded">VS Code</span>
+                        <span class="bg-zinc-950 border border-zinc-800 px-2.5 py-1 rounded">Linux / VPS</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. PROJECTS SECTION -->
+        <section id="projects" class="space-y-8">
+            <div class="space-y-2">
+                <p class="text-xs font-mono text-violet-500 uppercase tracking-widest">03 // DỰ ÁN</p>
+                <h2 class="text-3xl font-bold text-white">Dự án nổi bật</h2>
+            </div>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-gradient-to-b from-zinc-900 to-zinc-950 border border-zinc-800 rounded-xl p-5 space-y-4 shadow-xl hover:border-zinc-700 transition">
+                    <div class="w-10 h-10 bg-violet-950/50 border border-violet-800/30 rounded-lg flex items-center justify-center text-violet-400">🛡️</div>
+                    <h3 class="text-lg font-bold text-white">Advanced AutoMod Bot</h3>
+                    <p class="text-xs text-zinc-500 leading-relaxed">Hệ thống quản trị và kiểm duyệt tự động cho Discord, hỗ trợ lọc từ ngữ xấu, chặn spam theo tần suất.</p>
+                </div>
+                <div class="bg-gradient-to-b from-zinc-900 to-zinc-950 border border-zinc-800 rounded-xl p-5 space-y-4 shadow-xl hover:border-zinc-700 transition">
+                    <div class="w-10 h-10 bg-emerald-950/50 border border-emerald-800/30 rounded-lg flex items-center justify-center text-emerald-400">⚡</div>
+                    <h3 class="text-lg font-bold text-white">Adonis Extensions</h3>
+                    <p class="text-xs text-zinc-500 leading-relaxed">Bộ tiện ích mở rộng tùy biến dành cho hệ thống quản trị Adonis Admin trên nền tảng Roblox.</p>
+                </div>
+                <div class="bg-gradient-to-b from-zinc-900 to-zinc-950 border border-zinc-800 rounded-xl p-5 space-y-4 shadow-xl hover:border-zinc-700 transition">
+                    <div class="w-10 h-10 bg-blue-950/50 border border-blue-800/30 rounded-lg flex items-center justify-center text-blue-400">💼</div>
+                    <h3 class="text-lg font-bold text-white">HackViet Dev</h3>
+                    <p class="text-xs text-zinc-500 leading-relaxed">Xây dựng core bot sử dụng discord.js để vận hành cộng đồng lập trình viên Việt Nam.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. SNIPPETS CODE SECTION -->
+        <section id="snippets" class="space-y-8" x-data="{
+            search: '',
+            codeSnippets: [
+                { title: 'Discord Python Auto-Reconnect', lang: 'python', code: 'import discord\nfrom discord.ext import commands\n\nbot = commands.Bot(command_prefix=\'!\', reconnect=True)\n\n@bot.event\nasync def on_ready():\n    print(f\'Logged in as {bot.user.name}\')' },
+                { title: 'Roblox Leaderstat Script', lang: 'lua', code: 'game.Players.PlayerAdded:Connect(function(player)\n    local leaderstats = Instance.new(\"Folder\")\n    leaderstats.Name = \"leaderstats\"\n    leaderstats.Parent = player\n    \n    local gold = Instance.new(\"IntValue\")\n    gold.Name = \"Gold\"\n    gold.Value = 0\n    gold.Parent = leaderstats\nend)' }
+            ],
+            get filtered() {
+                return this.codeSnippets.filter(c => c.title.toLowerCase().includes(this.search.toLowerCase()))
+            }
+        }" x-init="setTimeout(() => { document.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el)) }, 100)">
+            <div class="space-y-2">
+                <p class="text-xs font-mono text-violet-500 uppercase tracking-widest">04 // CODE STORAGE</p>
+                <h2 class="text-3xl font-bold text-white">Thư viện Mã nguồn</h2>
+            </div>
+
+            <input type="text" placeholder="🔍 Tìm nhanh đoạn mã cần dùng..." x-model="search"
+                   class="w-full bg-zinc-900/80 border border-zinc-800 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-violet-500 transition">
+
+            <div class="space-y-4">
+                <template x-for="item in filtered" :key="item.title">
+                    <div class="bg-zinc-900/60 border border-zinc-800/80 rounded-xl overflow-hidden shadow-lg">
+                        <div class="bg-zinc-900/90 px-4 py-2 border-b border-zinc-800 flex justify-between items-center text-xs font-mono">
+                            <span class="text-zinc-200 font-semibold" x-text="item.title"></span>
+                            <span class="text-violet-400 uppercase text-[10px] bg-violet-950/50 px-2 py-0.5 rounded border border-violet-800/30" x-text="item.lang"></span>
+                        </div>
+                        <pre class="p-4 overflow-x-auto text-xs !bg-[#1a1b26]"><code :class="'language-' + item.lang" x-text="item.code"></code></pre>
+                    </div>
+                </template>
+            </div>
+        </section>
+
+        <!-- 7. GUESTBOOK -->
+        <section id="guestbook" class="space-y-6" x-data="{
+            newMsg: '',
+            messages: [
+                { user: 'RobloxFan99', text: 'Bot chạy mượt lắm anh ơi!', date: '03/07/2026' }
+            ],
+            addMessage() {
+                if(this.newMsg.trim() === '') return;
+                this.messages.unshift({ user: 'Guest_User', text: this.newMsg, date: '03/07/2026' });
+                this.newMsg = '';
+            }
+        }">
+            <div class="space-y-2">
+                <p class="text-xs font-mono text-violet-500 uppercase tracking-widest">LEAVE A MARK</p>
+                <h2 class="text-3xl font-bold text-white">Sổ Lưu Bút</h2>
+            </div>
+            <div class="bg-zinc-900/40 border border-zinc-800 rounded-xl p-5 space-y-4">
+                <div class="flex gap-2">
+                    <input type="text" placeholder="Để lại một lời chào hoặc góp ý..." x-model="newMsg" @keydown.enter="addMessage()"
+                           class="flex-1 bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-2 text-sm text-white focus:outline-none focus:border-violet-500">
+                    <button @click="addMessage()" class="bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-lg text-sm transition">Gửi</button>
+                </div>
+                <div class="space-y-3 pt-2">
+                    <template x-for="m in messages">
+                        <div class="text-xs bg-zinc-950/60 p-3 rounded-lg border border-zinc-800/60 flex justify-between items-center">
+                            <div>
+                                <span class="text-zinc-300 font-semibold" x-text="m.user"></span>: 
+                                <span class="text-zinc-400" x-text="m.text"></span>
+                            </div>
+                            <span class="text-[10px] text-zinc-600 font-mono" x-text="m.date"></span>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. CONTACT SECTION -->
+        <section id="contact" class="space-y-8 pb-20">
+            <div class="space-y-2">
+                <p class="text-xs font-mono text-violet-500 uppercase tracking-widest">05 // LIÊN HỆ</p>
+                <h2 class="text-3xl font-bold text-white">Kết nối</h2>
+            </div>
+            <div class="grid md:grid-cols-2 gap-4 font-mono text-xs">
+                <div class="bg-zinc-900/50 p-4 rounded-xl border border-zinc-800 flex items-center space-x-3">
+                    <span class="text-lg">✉️</span>
+                    <div><p class="text-zinc-500">EMAIL</p><p class="text-white mt-0.5">contact.deluxdark@gmail.com</p></div>
+                </div>
+                <div class="bg-zinc-900/50 p-4 rounded-xl border border-zinc-800 flex items-center space-x-3">
+                    <span class="text-lg">📍</span>
+                    <div><p class="text-zinc-500">ĐỊA ĐIỂM</p><p class="text-white mt-0.5">TP. Hồ Chí Minh, Việt Nam</p></div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- 9. FOOTER -->
+    <footer class="bg-zinc-950 border-t border-zinc-800/80 py-8 text-center text-xs font-mono text-zinc-600">
+        <div class="max-w-4xl mx-auto space-y-2">
+            <p>✦ © 2026 DeluxDark. All rights reserved.</p>
+            <div class="text-[10px] text-zinc-500 space-y-0.5 opacity-70">
+                <p>Thời gian truy cập: <span class="text-violet-500">10:34:06 03/07/2026</span></p>
+                <p>Địa chỉ IP truy cập: <span class="text-zinc-400">184.28.156.216</span></p>
+                <p>Thiết bị: <span class="text-blue-400">macOS</span> | Trình duyệt: <span class="text-emerald-400">Chrome</span></p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
